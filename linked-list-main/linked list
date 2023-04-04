@@ -1,0 +1,194 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node{
+	int data;
+	struct Node *next;
+};
+typedef struct Node node;
+
+node* insertStart(node* head,node* newNode){
+	node *p;
+	p=head;
+	newNode->next=p;
+	head=newNode;
+	return head;
+}
+node* insertLast(node* head,node* newNode){
+	if(head==NULL){
+		//head=insertStart(head,newNode);
+		head=newNode;
+		newNode->next=NULL;
+		return head;
+	}
+	else{
+		node *p;
+		p=head;
+		while(p->next!=NULL){
+			p=p->next;
+		}
+		p->next=newNode;
+		newNode->next=NULL;
+		return head;
+	}
+}
+node* makeList()
+{
+	int n;
+	node *head = NULL;
+	printf("Enter elements of the list\n");
+	while(1){
+		scanf("%d",&n);
+		if(n == -1)
+		   break;
+		node* newNode = (node*)malloc(sizeof(node));
+		newNode->data = n;
+		newNode->next = NULL;
+		if(n%2==1){
+			head = insertStart(head,newNode);
+		}
+		else{
+			head = insertLast(head,newNode);
+		}
+	}
+	printf("linked list created\n");
+	return head;
+}
+node* cutLastaddFirst(node* head){
+		node* p=head;
+		if(head==NULL){
+		return head;
+	}
+	else if(p->next==NULL){
+		return head;
+	}
+	else {
+	node* q=NULL;
+	while(p->next!=NULL){
+		q=p;
+		p=p->next;
+	}
+	node* last=p;
+	q->next=NULL;
+	head=insertStart(head,last);
+	return head;
+	}
+}
+node* cutFirstaddLast(node* head){
+		node *p=head;
+		node *last=NULL;
+	if(p==NULL){
+		return head;
+	}
+	else if(p->next==NULL){
+		return head;
+	}
+	else {
+	last=p;
+	head=p->next;
+	head=insertLast(head,last);
+	return head;
+	}
+}
+node* addnumbertostart(node* head){
+	node* newData=(node*)malloc(sizeof(node));
+	printf("Enter the number for adding start of the list: ");
+	scanf("%d",&newData->data);
+	head=insertStart(head,newData);
+	return head;
+}
+node* deletemiddle(node* head){
+	node* p=head;
+	if(p==NULL){
+		return head;
+	}
+	else if(p->next==NULL){
+		return head;
+	}
+	else if(p->next->next==NULL){
+		p->next=NULL;
+		return head;
+	}
+	else{
+		node* q;
+		int counter=0,flag=0;
+		while(p!=NULL){
+			p=p->next;
+			counter++;
+		}
+		p=head;
+		while(flag<(counter/2)){
+			q=p;
+			p=p->next;
+			flag++;
+		}
+		node *deleted=p;
+		q->next=deleted->next;
+		free(deleted);
+		return head;
+	}
+}
+node* deletehead(node* head){
+	node* p=head;
+	head=p->next;
+	free(p);
+return head;
+}
+node* takeandDelete(node* head){
+	node* p=head;
+	node* q=NULL;
+	int num;
+	printf("Enter a number to delete: ");
+	scanf("%d",&num);
+	if(p==NULL){
+		return head;
+	}
+	else if(p->next==NULL){
+		free(p);
+		return head;
+	}
+	else {
+	while(p->next!=NULL&&p->data!=num){
+	q=p;
+	p=p->next;	
+	
+		if(p->data==num){
+			node* delette=p;
+			q->next=delette->next;
+			free(delette);
+			return head;
+			}
+		}
+	}
+}
+void printList(node* head){
+	node *p;
+	p=head;
+	while(p!=NULL){
+		printf("%d ",p->data);
+		p=p->next;
+	}
+}
+int main(void){
+	node *head=NULL;
+	head=makeList();
+	printList(head);
+	printf("\n");
+	head=cutLastaddFirst(head);
+	printList(head);
+	printf("\n");
+	head=cutFirstaddLast(head);
+	printList(head);
+	printf("\n");
+	head=deletehead(head);
+	printList(head);
+	printf("\n");
+	head=addnumbertostart(head);
+	printList(head);
+	printf("\n");
+	head=deletemiddle(head);
+	printList(head);
+	printf("\n");
+	head=takeandDelete(head);
+	printList(head);
+	printf("\n");
+}
